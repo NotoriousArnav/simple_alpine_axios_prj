@@ -4,6 +4,8 @@ This is a demo project showcasing how to use the CrawlX API to scrape data from 
 
 We will be using Articles from The Guardian
 
+Hosted ["Here"](https://notoriousarnav.github.io/simple_alpine_axios_prj/)
+
 ## Overview
 
 The project consists of an HTML file that uses Axios for making HTTP requests and Alpine.js for data binding. When the user enters the URL of an article and clicks "Fetch Article", the HTML file sends a POST request to the CrawlX API, specifying the URL of the article and the CSS selectors for extracting the headline and body. Upon receiving the response from the API, the headline and body of the article are displayed on the webpage.
