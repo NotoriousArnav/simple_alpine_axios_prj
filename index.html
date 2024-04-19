@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Simple News Scraper</title>
+</head>
+<body class="p-10">
+    <div x-data="dataD()" x-init="mounted()" class="mt-16 xxl:mt-0 xxl:ml-auto">
+        <h4 class="font-bold text-lg">News Scraper Website</h4>
+        <p>In this example, we are using the CrawlX API to scrape data from a given URL.</p>
+
+        <div style="height:25px;" class="mt-6">
+            <p x-show.transition="ok" style="display: none;" class="bg-blue-500 text-white rounded inline py-1 px-2">Data updated!</p>
+        </div>
+
+        <div class="mt-4">
+            <label>Enter article URL: <input x-model="articleUrl" type="text" class="border border-1"></label>
+            <button @click="fetchArticle()" class="bg-blue-500 text-white px-4 py-2 rounded">Fetch Article</button>
+        </div>
+
+        <div x-show.transition="axiosResponse" class="mt-4">
+            <h2 x-text="axiosResponse.headline" class="text-xl font-bold"></h2>
+            <p x-text="axiosResponse.body" class="mt-2"></p>
+        </div>
+    </div>
+    <script>
+        function dataD(){
+           return {
+                articleUrl: '',
+                axiosResponse: null,
+                ok: false,
+
+                fetchArticle(){
+                    axios.post('https://crawlx.onrender.com/extract', {
+                        "url": this.articleUrl,
+                        "selectors": {
+                            "headline": {
+                                "css": "div[data-gu-name='headline']",
+                                "type": "Text"
+                            },
+                            "body": {
+                                "css": "div[data-gu-name='body']",
+                                "type": "Text"
+                            }
+                        }
+                    }).then(response => {
+                        this.ok = true;
+                        this.axiosResponse = response.data.data;
+                        setTimeout(() => {
+                            this.ok = false;
+                        }, 5000);
+                    }).catch(error => {
+                        console.error('Error fetching article:', error);
+                    });
+                },
+                mounted(){
+                    console.log('mounted');
+                }
+           }
+       }
+    </script>
+</body>
+</html>
